@@ -12,7 +12,7 @@ public class Product {
     private Integer price;
     private Integer stock;
     private String description;
-    private Date createdDate;
+    private Date createdDate;          //預設使用GMT+0的時區返回
     private Date lastModifiedDate;
 
     public Integer getProductId() {
