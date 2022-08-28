@@ -1,5 +1,6 @@
 package com.keer.springbootmall.dao.rowmapper;
 
+import com.keer.springbootmall.constant.ProductCategory;
 import com.keer.springbootmall.model.Product;
 import org.springframework.jdbc.core.RowMapper;
 
@@ -17,7 +18,13 @@ public class Rowmapper implements RowMapper {
 
         product.setProductId(rs.getInt("product_id"));
         product.setProductName(rs.getString("product_name"));
-        product.setCategory(rs.getString("category"));
+
+        String categoryStr = rs.getString("category");          //String 轉 Enum 的方法
+        ProductCategory category = ProductCategory.valueOf(categoryStr);
+        product.setCategory(category);
+
+//        product.setCategory(ProductCategory.valueOf(rs.getString("category")));  //進階版
+
         product.setImageUrl(rs.getString("image_url"));
         product.setPrice(rs.getInt("price"));
         product.setStock(rs.getInt("stock"));

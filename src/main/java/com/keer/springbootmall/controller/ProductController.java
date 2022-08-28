@@ -23,6 +23,5 @@ public class ProductController {
             return ResponseEntity.status(HttpStatus.OK).body(product);
         } else
             return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
-
     }
 }
