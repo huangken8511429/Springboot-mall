@@ -23,6 +23,7 @@ public class Rowmapper implements RowMapper {
         ProductCategory category = ProductCategory.valueOf(categoryStr);
         product.setCategory(category);
 
+
 //        product.setCategory(ProductCategory.valueOf(rs.getString("category")));  //進階版
 
         product.setImageUrl(rs.getString("image_url"));
