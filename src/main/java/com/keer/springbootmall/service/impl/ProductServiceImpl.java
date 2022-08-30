@@ -20,6 +20,11 @@ private ProductDao productDao;
 
 
     @Override
+    public Integer countProduct(CategoryParam categoryParam) {
+        return productDao.countProduct(categoryParam);
+    }
+
+    @Override
     public List<Product> getProducts(CategoryParam categoryParam) {
         return productDao.getProducts(categoryParam);
 

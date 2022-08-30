@@ -5,6 +5,7 @@ import com.keer.springbootmall.constant.ProductCategory;
 import com.keer.springbootmall.dto.ProductRequest;
 import com.keer.springbootmall.model.Product;
 import com.keer.springbootmall.service.ProductService;
+import com.keer.springbootmall.util.Page;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -15,6 +16,7 @@ import javax.validation.Valid;
 import javax.validation.constraints.Max;
 import javax.validation.constraints.Min;
 import java.util.List;
+
 @Validated //對應@MAX,@Min
 @RestController
 public class ProductController {
@@ -24,18 +26,17 @@ public class ProductController {
 
 
     @GetMapping("/products")  //在Restful裡就表示要查詢的是商品列表
-    public ResponseEntity<List<Product>> getProducts
-                            //查詢條件
-            (@RequestParam(required = false) ProductCategory category,
-             @RequestParam(required = false) String search,
-             //排序功能 Sorting
-             @RequestParam(defaultValue = "created_date") String orderBy,
-             @RequestParam(defaultValue = "desc") String sort, //預設 desc 降序: 商品大到小的排序
-             //分頁 Pagination
-             @RequestParam(defaultValue = "5") @Max(1000) @Min(0) Integer limit,  //一次限制只有幾筆資料出來
-             @RequestParam(defaultValue = "0") @Min(0) Integer offset  //跳過幾筆數據
-             )
-    {
+    public ResponseEntity<Page<Product>> getProducts
+        //查詢條件
+    (@RequestParam(required = false) ProductCategory category,
+     @RequestParam(required = false) String search,
+     //排序功能 Sorting
+     @RequestParam(defaultValue = "created_date") String orderBy,
+     @RequestParam(defaultValue = "desc") String sort, //預設 desc 降序: 商品大到小的排序
+     //分頁 Pagination
+     @RequestParam(defaultValue = "5") @Max(1000) @Min(0) Integer limit,  //一次限制只有幾筆資料出來
+     @RequestParam(defaultValue = "0") @Min(0) Integer offset  //跳過幾筆數據
+    ) {
         CategoryParam categoryParam = new CategoryParam();
 
         categoryParam.setCategory(category);
@@ -44,10 +45,19 @@ public class ProductController {
         categoryParam.setSort(sort);
         categoryParam.setLimit(limit);
         categoryParam.setOffset(offset);
-
+        //get productlist
         List<Product> productList = productService.getProducts(categoryParam);
+        //get商品總數
+        Integer total = productService.countProduct(categoryParam);
+        //分頁 轉成Json
+        Page<Product> page = new Page<>();
 
-        return ResponseEntity.status(HttpStatus.OK).body(productList);
+        page.setLimit(limit);
+        page.setOffset(offset);
+        page.setTotal(total);
+        page.setResults(productList);
+
+        return ResponseEntity.status(HttpStatus.OK).body(page);
     }
 
     @GetMapping("/products/{productId}")

@@ -8,6 +8,7 @@ import com.keer.springbootmall.model.Product;
 import java.util.List;
 
 public interface ProductService {
+    Integer countProduct(CategoryParam categoryParam);
     List<Product> getProducts(CategoryParam categoryParam);
     Product getProductbyId(Integer productId);
 
