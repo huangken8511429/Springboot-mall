@@ -1,5 +1,6 @@
 package com.keer.springbootmall.controller;
 
+import com.keer.springbootmall.constant.CategoryParam;
 import com.keer.springbootmall.constant.ProductCategory;
 import com.keer.springbootmall.dto.ProductRequest;
 import com.keer.springbootmall.model.Product;
@@ -22,8 +23,12 @@ public class ProductController {
     @GetMapping("/products")  //在Restful裡就表示要查詢的是商品列表
     public ResponseEntity<List<Product>> getProducts(@RequestParam(required = false) ProductCategory category
     ,@RequestParam(required = false) String search) {
+        CategoryParam categoryParam = new CategoryParam();
 
-        List<Product> productList = productService.getProducts(category,search);
+        categoryParam.setCategory(category);
+        categoryParam.setSearch(search);
+
+        List<Product> productList = productService.getProducts(categoryParam);
 
         return ResponseEntity.status(HttpStatus.OK).body(productList);
     }

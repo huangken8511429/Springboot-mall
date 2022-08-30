@@ -1,5 +1,6 @@
 package com.keer.springbootmall.dao.impl;
 
+import com.keer.springbootmall.constant.CategoryParam;
 import com.keer.springbootmall.constant.ProductCategory;
 import com.keer.springbootmall.dao.ProductDao;
 import com.keer.springbootmall.dao.rowmapper.Rowmapper;
@@ -22,21 +23,21 @@ public class ProductDaoImpl implements ProductDao {
     private NamedParameterJdbcTemplate namedParameterJdbcTemplate;
 
     @Override
-    public List<Product> getProducts(ProductCategory category, String search) {
+    public List<Product> getProducts(CategoryParam categoryParam) {
         String sql = "SELECT product_id, product_name, category, image_url, price, stock, description, created_date, last_modified_date " +
                 "FROM product WHERE 1=1";
 
         Map<String, Object> map = new HashMap<>();
 
-        if (category != null) {
+        if (categoryParam.getCategory() != null) {
             sql = sql + " AND category = :category";
-            map.put("category", category.name());
+            map.put("category", categoryParam.getCategory().name()); //.name是把原本ProductCategory enum的值轉成String
         }
 
 
-        if (search != null) {
+        if (categoryParam.getSearch() != null) {
             sql = sql + " AND product_name LIKE :search";
-            map.put("search", "%" + search + "%");  //模糊查詢的%一定要放在MAP裡面,這是SpringJDBC的限制
+            map.put("search", "%" + categoryParam.getSearch() + "%");  //模糊查詢的%一定要放在MAP裡面,這是SpringJDBC的限制
         }
 
         List<Product> productList = namedParameterJdbcTemplate.query(sql, map, new Rowmapper());

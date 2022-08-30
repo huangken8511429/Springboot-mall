@@ -1,6 +1,7 @@
 package com.keer.springbootmall.service.impl;
 
 
+import com.keer.springbootmall.constant.CategoryParam;
 import com.keer.springbootmall.constant.ProductCategory;
 import com.keer.springbootmall.dao.ProductDao;
 import com.keer.springbootmall.dto.ProductRequest;
@@ -19,8 +20,8 @@ private ProductDao productDao;
 
 
     @Override
-    public List<Product> getProducts(ProductCategory category,String search) {
-        return productDao.getProducts(category,search);
+    public List<Product> getProducts(CategoryParam categoryParam) {
+        return productDao.getProducts(categoryParam);
 
     }
 

@@ -1,5 +1,6 @@
 package com.keer.springbootmall.service;
 
+import com.keer.springbootmall.constant.CategoryParam;
 import com.keer.springbootmall.constant.ProductCategory;
 import com.keer.springbootmall.dto.ProductRequest;
 import com.keer.springbootmall.model.Product;
@@ -7,7 +8,7 @@ import com.keer.springbootmall.model.Product;
 import java.util.List;
 
 public interface ProductService {
-    List<Product> getProducts(ProductCategory category,String search);
+    List<Product> getProducts(CategoryParam categoryParam);
     Product getProductbyId(Integer productId);
 
     Integer createProduct(ProductRequest productRequest);
