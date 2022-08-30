@@ -21,12 +21,20 @@ public class ProductController {
 
 
     @GetMapping("/products")  //在Restful裡就表示要查詢的是商品列表
-    public ResponseEntity<List<Product>> getProducts(@RequestParam(required = false) ProductCategory category
-    ,@RequestParam(required = false) String search) {
+    public ResponseEntity<List<Product>> getProducts
+                            //查詢條件
+            (@RequestParam(required = false) ProductCategory category,
+             @RequestParam(required = false) String search,
+                            //排序功能Sorting
+             @RequestParam(defaultValue = "created_date") String orderBy,
+             @RequestParam(defaultValue = "desc") String sort) //預設 desc 降序: 商品大到小的排序
+    {
         CategoryParam categoryParam = new CategoryParam();
 
         categoryParam.setCategory(category);
         categoryParam.setSearch(search);
+        categoryParam.setOrderBy(orderBy);
+        categoryParam.setSort(sort);
 
         List<Product> productList = productService.getProducts(categoryParam);
 

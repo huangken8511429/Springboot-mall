@@ -40,6 +40,7 @@ public class ProductDaoImpl implements ProductDao {
             map.put("search", "%" + categoryParam.getSearch() + "%");  //模糊查詢的%一定要放在MAP裡面,這是SpringJDBC的限制
         }
 
+        sql=sql+" ORDER BY " +categoryParam.getOrderBy() + " " + categoryParam.getSort();
         List<Product> productList = namedParameterJdbcTemplate.query(sql, map, new Rowmapper());
 
         return productList;
