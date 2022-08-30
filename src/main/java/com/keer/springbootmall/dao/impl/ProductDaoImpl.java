@@ -26,19 +26,11 @@ public class ProductDaoImpl implements ProductDao {
     public Integer countProduct(CategoryParam categoryParam) {
         String sql = " SELECT count(*) FROM product WHERE 1=1";
 
-        Map<String,Object> map =new HashMap<>();
+        Map<String, Object> map = new HashMap<>();
 
-        if (categoryParam.getSearch() != null) {
-            sql = sql + " AND product_name LIKE :search";
-            map.put("search","%"+categoryParam.getSearch()+"%");
-        }
+        sql = addFilteringSql(sql, map, categoryParam);
 
-        if (categoryParam.getCategory() != null) {
-            sql = sql + " AND category = :category";
-            map.put("category", categoryParam.getCategory().name()); //.name是把原本ProductCategory enum的值轉成String
-        }
-
-        Integer total = namedParameterJdbcTemplate.queryForObject(sql,map,Integer.class);  //將物件轉成Integar類型,queryForObject通常是取count會用到
+        Integer total = namedParameterJdbcTemplate.queryForObject(sql, map, Integer.class);  //將物件轉成Integar類型,queryForObject通常是取count會用到
 
         return total;
     }
@@ -50,23 +42,14 @@ public class ProductDaoImpl implements ProductDao {
 
         Map<String, Object> map = new HashMap<>();
 
-        if (categoryParam.getCategory() != null) {
-            sql = sql + " AND category = :category";
-            map.put("category", categoryParam.getCategory().name()); //.name是把原本ProductCategory enum的值轉成String
-        }
+        sql = addFilteringSql(sql, map, categoryParam);
 
+        sql = sql + " ORDER BY " + categoryParam.getOrderBy() + " " + categoryParam.getSort();
 
-        if (categoryParam.getSearch() != null) {
-            sql = sql + " AND product_name LIKE :search";
-            map.put("search", "%" + categoryParam.getSearch() + "%");  //模糊查詢的%一定要放在MAP裡面,這是SpringJDBC的限制
-        }
+        sql = sql + " LIMIT :limit OFFSET :offset";
 
-        sql=sql+" ORDER BY " +categoryParam.getOrderBy() + " " + categoryParam.getSort();
-
-        sql=sql+" LIMIT :limit OFFSET :offset";
-
-        map.put("limit",categoryParam.getLimit());
-        map.put("offset",categoryParam.getOffset());
+        map.put("limit", categoryParam.getLimit());
+        map.put("offset", categoryParam.getOffset());
 
         List<Product> productList = namedParameterJdbcTemplate.query(sql, map, new Rowmapper());
 
@@ -153,5 +136,19 @@ public class ProductDaoImpl implements ProductDao {
         map.put("productId", productId);
 
         namedParameterJdbcTemplate.update(sql, map);
+    }
+
+    private String addFilteringSql(String sql, Map<String, Object> map, CategoryParam categoryParam) {
+        if (categoryParam.getCategory() != null) {
+            sql = sql + " AND category = :category";
+            map.put("category", categoryParam.getCategory().name()); //.name是把原本ProductCategory enum的值轉成String
+        }
+
+
+        if (categoryParam.getSearch() != null) {
+            sql = sql + " AND product_name LIKE :search";
+            map.put("search", "%" + categoryParam.getSearch() + "%");  //模糊查詢的%一定要放在MAP裡面,這是SpringJDBC的限制
+        }
+        return sql;
     }
 }
