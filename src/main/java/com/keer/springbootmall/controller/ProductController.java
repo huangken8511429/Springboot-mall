@@ -8,11 +8,14 @@ import com.keer.springbootmall.service.ProductService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
+import javax.validation.constraints.Max;
+import javax.validation.constraints.Min;
 import java.util.List;
-
+@Validated //對應@MAX,@Min
 @RestController
 public class ProductController {
 
@@ -25,9 +28,13 @@ public class ProductController {
                             //查詢條件
             (@RequestParam(required = false) ProductCategory category,
              @RequestParam(required = false) String search,
-                            //排序功能Sorting
+             //排序功能 Sorting
              @RequestParam(defaultValue = "created_date") String orderBy,
-             @RequestParam(defaultValue = "desc") String sort) //預設 desc 降序: 商品大到小的排序
+             @RequestParam(defaultValue = "desc") String sort, //預設 desc 降序: 商品大到小的排序
+             //分頁 Pagination
+             @RequestParam(defaultValue = "5") @Max(1000) @Min(0) Integer limit,  //一次限制只有幾筆資料出來
+             @RequestParam(defaultValue = "0") @Min(0) Integer offset  //跳過幾筆數據
+             )
     {
         CategoryParam categoryParam = new CategoryParam();
 
@@ -35,6 +42,8 @@ public class ProductController {
         categoryParam.setSearch(search);
         categoryParam.setOrderBy(orderBy);
         categoryParam.setSort(sort);
+        categoryParam.setLimit(limit);
+        categoryParam.setOffset(offset);
 
         List<Product> productList = productService.getProducts(categoryParam);
 
