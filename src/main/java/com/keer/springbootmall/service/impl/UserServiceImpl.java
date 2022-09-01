@@ -10,6 +10,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Component;
+import org.springframework.util.DigestUtils;
 import org.springframework.web.server.ResponseStatusException;
 
 @Component  //在該Service實作判斷的邏輯，DAO單純只是跟資料庫做溝通
@@ -23,13 +24,16 @@ public class UserServiceImpl implements UserService {
     @Override
     public User login(UserLoginRequest userLoginRequest) {
         User user = userDao.getUserByEmail(userLoginRequest.getEmail());
-
+       //檢查user是否存在
         if (user == null) {
             log.warn("該Email {} 還沒註冊", userLoginRequest.getEmail());
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST);
         }
+        //使用MD5生成密碼的雜湊值
 
-        if (user.getPassword().equals(userLoginRequest.getPassword()))
+        String hashedPassword = DigestUtils.md5DigestAsHex(userLoginRequest.getPassword().getBytes());
+        //比較密碼
+        if (user.getPassword().equals(hashedPassword))
             return user;
         else {
             log.warn("Email {} 的密碼錯誤", userLoginRequest.getEmail());
@@ -51,8 +55,12 @@ public class UserServiceImpl implements UserService {
         if (user != null) {
             log.warn("該 Email {} 已經被註冊", userRegisterRequest.getEmail()); //指定log等級warn，{}表示變數，在這邊就是後面 userRegisterRequest.getEmail()的值
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST);
-        } else
-            return userDao.createUser(userRegisterRequest);
+        }
+       //使用MD5來加密密碼，以防資料庫外洩，造成資安問題。
+        String hashedPassword = DigestUtils.md5DigestAsHex(userRegisterRequest.getPassword().getBytes());
+        userRegisterRequest.setPassword(hashedPassword);
+
+        return userDao.createUser(userRegisterRequest);
 
 
     }
