@@ -37,7 +37,7 @@ public class UserServiceImpl implements UserService {
             return user;
         else {
             log.warn("Email {} 的密碼錯誤", userLoginRequest.getEmail());
-            throw new ResponseStatusException(HttpStatus.BAD_REQUEST);
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST);dwdw
         }
 
     }
