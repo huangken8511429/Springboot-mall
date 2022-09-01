@@ -1,10 +1,15 @@
 package com.keer.springbootmall.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonProperty;
+
 import java.util.Date;
 
 public class User {
  private Integer userId;
+ @JsonProperty("電子信箱") //返回Json格式 email變為電子信箱
  private String email;
+ @JsonIgnore  //返回Json格式的時候 將密碼隱藏 避免使用者資安洩漏
  private String password;
  private Date createdDate;
  private Date lastModifiedDate;
