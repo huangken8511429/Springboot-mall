@@ -6,7 +6,7 @@ import org.springframework.jdbc.core.RowMapper;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
-
+//將資料庫結果 轉成Product物件
 public class Rowmapper implements RowMapper {
 
 

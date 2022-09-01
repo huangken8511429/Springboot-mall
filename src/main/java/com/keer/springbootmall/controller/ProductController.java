@@ -17,7 +17,7 @@ import javax.validation.constraints.Max;
 import javax.validation.constraints.Min;
 import java.util.List;
 
-@Validated //對應@MAX,@Min
+@Validated //對應@RequestParam 、 @RequestHeader 、 @PathVariable
 @RestController
 public class ProductController {
 
