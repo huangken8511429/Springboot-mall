@@ -32,8 +32,8 @@ public class ProductControllerTest {
     //查詢商品
     @Test
     public void getProduct_success() throws Exception {
-
-        RequestBuilder requestBuilder = MockMvcRequestBuilders.get("/products/{productId}",1);
+        RequestBuilder requestBuilder = MockMvcRequestBuilders
+                .get("/products/{productId}", 1);
 
         mockMvc.perform(requestBuilder)
                 .andDo(print())
@@ -47,6 +47,7 @@ public class ProductControllerTest {
                 .andExpect(jsonPath("$.createdDate", notNullValue()))
                 .andExpect(jsonPath("$.lastModifiedDate", notNullValue()));
     }
+
     @Test
     public void getProduct_notFound() throws Exception {
         RequestBuilder requestBuilder = MockMvcRequestBuilders
@@ -261,7 +262,6 @@ public class ProductControllerTest {
                 .andExpect(jsonPath("$.results[0].productId", equalTo(5)))
                 .andExpect(jsonPath("$.results[1].productId", equalTo(4)));
     }
-
 
 
 }

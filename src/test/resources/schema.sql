@@ -1,4 +1,4 @@
-CREATE TABLE IF NOT EXISTS product          --記得CREATE TABLE後面要加上IF NOT EXISTS 因為我們單元測試的時候，H2資料庫會運行好幾次，這樣的話資料會一直重複加
+CREATE TABLE IF NOT EXISTS product
 (
     product_id         INT          NOT NULL PRIMARY KEY AUTO_INCREMENT,
     product_name       VARCHAR(128)  NOT NULL,
@@ -10,3 +10,15 @@ CREATE TABLE IF NOT EXISTS product          --記得CREATE TABLE後面要加上I
     created_date       TIMESTAMP    NOT NULL,
     last_modified_date TIMESTAMP    NOT NULL
     );
+
+CREATE TABLE IF NOT EXISTS user
+(
+    user_id            INT          NOT NULL PRIMARY KEY AUTO_INCREMENT,
+    email              VARCHAR(256) NOT NULL UNIQUE,
+    password           VARCHAR(256) NOT NULL,
+    created_date       TIMESTAMP    NOT NULL,
+    last_modified_date TIMESTAMP    NOT NULL
+);
+
+
+
