@@ -5,8 +5,8 @@ import java.util.List;
 
 public class Order {
 
-    private Integer order_id;
-    private Integer user_id;
+    private Integer orderId;
+    private Integer userId;
     private Integer totalAmount;
     private Date createdDate;
     private Date lastModifiedDate;
@@ -21,20 +21,20 @@ public class Order {
         this.orderItemList = orderItemList;
     }
 
-    public Integer getOrder_id() {
-        return order_id;
+    public Integer getOrderId() {
+        return orderId;
     }
 
-    public void setOrder_id(Integer order_id) {
-        this.order_id = order_id;
+    public void setOrderId(Integer orderId) {
+        this.orderId = orderId;
     }
 
-    public Integer getUser_id() {
-        return user_id;
+    public Integer getUserId() {
+        return userId;
     }
 
-    public void setUser_id(Integer user_id) {
-        this.user_id = user_id;
+    public void setUserId(Integer userId) {
+        this.userId = userId;
     }
 
     public Integer getTotalAmount() {

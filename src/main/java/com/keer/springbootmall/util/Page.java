@@ -4,17 +4,17 @@ import java.util.List;
 
 public class Page<T> {
 
-    private Integer limit;
-    private Integer offset;
-    private Integer total;
-    private List<T> results;
+        private Integer limit;
+        private Integer offset;
+        private Integer total;
+        private List<T> results;
 
-    public Integer getLimit() {
-        return limit;
-    }
+        public Integer getLimit() {
+            return limit;
+        }
 
-    public void setLimit(Integer limit) {
-        this.limit = limit;
+        public void setLimit(Integer limit) {
+            this.limit = limit;
     }
 
     public Integer getOffset() {

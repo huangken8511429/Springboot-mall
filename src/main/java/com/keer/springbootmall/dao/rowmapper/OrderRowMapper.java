@@ -11,8 +11,8 @@ public class OrderRowMapper implements RowMapper<Order>  {
     public Order mapRow(ResultSet rs, int i) throws SQLException {
         Order order = new Order();
 
-        order.setOrder_id(rs.getInt("order_id"));
-        order.setUser_id(rs.getInt("user_id"));
+        order.setOrderId(rs.getInt("order_id"));
+        order.setUserId(rs.getInt("user_id"));
         order.setTotalAmount(rs.getInt("total_amount"));
         order.setCreatedDate(rs.getTimestamp("created_date"));
         order.setLastModifiedDate(rs.getTimestamp("last_modified_date"));

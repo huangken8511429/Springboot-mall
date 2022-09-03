@@ -1,5 +1,6 @@
 package com.keer.springbootmall.service.impl;
 
+import com.keer.springbootmall.constant.OrderQueryParams;
 import com.keer.springbootmall.dao.OrderDao;
 import com.keer.springbootmall.dao.ProductDao;
 import com.keer.springbootmall.dao.UserDao;
@@ -10,12 +11,10 @@ import com.keer.springbootmall.model.OrderItem;
 import com.keer.springbootmall.model.Product;
 import com.keer.springbootmall.model.User;
 import com.keer.springbootmall.service.OrderService;
-import org.apache.juli.logging.Log;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.server.ResponseStatusException;
@@ -34,11 +33,30 @@ public class OrderServiceImpl implements OrderService {
 
     private final static Logger log = LoggerFactory.getLogger(OrderServiceImpl.class);  //這邊log用法要注意，要import org.slf4j版本
 
+
+    @Override
+    public Integer countOrder(OrderQueryParams orderQueryParams) {
+        return orderDao.countOrder(orderQueryParams);
+    }
+
+    @Override
+    public List<Order> getOrders(OrderQueryParams orderQueryParams) {
+        List<Order> orderList = orderDao.getOrders(orderQueryParams);
+
+        for (Order order : orderList) {
+            List<OrderItem> orderItemList = orderDao.getOrderItemsByOrderId(order.getOrderId());
+
+            order.setOrderItemList(orderItemList);
+        }
+
+        return orderList;
+    }
+
     @Override
     public Order getOrderById(Integer orderId) {
         Order order = orderDao.getOrderById(orderId);
 
-        List<OrderItem> orderItemList = orderDao.getOrderItemByOrderId(orderId);
+        List<OrderItem> orderItemList = orderDao.getOrderItemsByOrderId(orderId);
 
         //一張訂單裡面會包含多個orderItem
         order.setOrderItemList(orderItemList);
@@ -63,7 +81,7 @@ public class OrderServiceImpl implements OrderService {
         //取得商品訂單中所有商品的ID以及數量
         for (BuyItem buyItem : createdOrderRequest.getBuyItemList()) {
             Product product = productDao.getProductById(buyItem.getProductId());
-           //確認清單裡的商品是否存在
+            //確認清單裡的商品是否存在
             if (product == null) {
                 log.warn("商品 {} 不存在", buyItem.getProductId());
                 throw new ResponseStatusException(HttpStatus.BAD_REQUEST);
@@ -74,7 +92,7 @@ public class OrderServiceImpl implements OrderService {
             }
 
             //更新庫存
-            productDao.updateStock(product.getProductId(),product.getStock() - buyItem.getQuantity());
+            productDao.updateStock(product.getProductId(), product.getStock() - buyItem.getQuantity());
 
             //計算總價錢
             int amount = buyItem.getQuantity() * product.getPrice();
