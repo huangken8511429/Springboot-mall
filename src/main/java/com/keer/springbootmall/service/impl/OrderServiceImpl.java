@@ -4,6 +4,7 @@ import com.keer.springbootmall.dao.OrderDao;
 import com.keer.springbootmall.dao.ProductDao;
 import com.keer.springbootmall.dto.BuyItem;
 import com.keer.springbootmall.dto.CreatedOrderRequest;
+import com.keer.springbootmall.model.Order;
 import com.keer.springbootmall.model.OrderItem;
 import com.keer.springbootmall.model.Product;
 import com.keer.springbootmall.service.OrderService;
@@ -20,6 +21,19 @@ public class OrderServiceImpl implements OrderService {
     private OrderDao orderDao;
     @Autowired
     private ProductDao productDao;
+
+    @Override
+    public Order getOrderById(Integer orderId) {
+        Order order = orderDao.getOrderById(orderId);
+
+        List<OrderItem> orderItemList = orderDao.getOrderItemByOrderId(orderId);
+
+          //一張訂單裡面會包含多個orderItem
+        order.setOrderItemList(orderItemList);
+
+        return order;
+    }
+
     @Transactional //因為有修改多張Table，故加上@Transactional，方便之後發生Exception，Rollback資料庫操作，確保兩個table是同時發生，或同時失敗。
     @Override
     public Integer createdOrder(Integer userId, CreatedOrderRequest createdOrderRequest) {
