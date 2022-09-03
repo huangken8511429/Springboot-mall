@@ -1,7 +1,6 @@
 package com.keer.springbootmall.dao;
 
 import com.keer.springbootmall.constant.CategoryParam;
-import com.keer.springbootmall.constant.ProductCategory;
 import com.keer.springbootmall.dto.ProductRequest;
 import com.keer.springbootmall.model.Product;
 
@@ -11,7 +10,7 @@ public interface ProductDao {
     Integer countProduct(CategoryParam categoryParam);
 
     List<Product> getProducts(CategoryParam categoryParam);
-    Product getById (Integer productId);
+    Product getProductById(Integer productId);
 
     Integer createProduct(ProductRequest productRequest);
 

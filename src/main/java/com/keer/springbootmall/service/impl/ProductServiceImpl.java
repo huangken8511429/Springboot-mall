@@ -2,7 +2,6 @@ package com.keer.springbootmall.service.impl;
 
 
 import com.keer.springbootmall.constant.CategoryParam;
-import com.keer.springbootmall.constant.ProductCategory;
 import com.keer.springbootmall.dao.ProductDao;
 import com.keer.springbootmall.dto.ProductRequest;
 import com.keer.springbootmall.model.Product;
@@ -33,7 +32,7 @@ private ProductDao productDao;
 
     @Override
     public Product getProductbyId(Integer productId) {
-        return productDao.getById(productId);
+        return productDao.getProductById(productId);
     }
 
     @Override
